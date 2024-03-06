@@ -49,3 +49,24 @@ class UserRegisterForm(UserCreationForm):
     class Meta:
         model = User
         fields = ('first_name', 'last_name', 'username', 'email', 'password1', 'password2')
+
+
+class ProfileForm(UserChangeForm):
+    first_name = forms.CharField(widget=forms.TextInput(attrs={
+        'class': 'form-control py-4'
+    }))
+    last_name = forms.CharField(widget=forms.TextInput(attrs={
+        'class': 'form-control py-4'
+    }))
+    username = forms.CharField(widget=forms.TextInput(attrs={
+        'class': 'form-control py-4',
+        'readonly': True
+    }))
+    email = forms.CharField(widget=forms.TextInput(attrs={
+        'class': 'form-control py-4',
+        'readonly': True
+    }))
+
+    class Meta:
+        model = User
+        fields = ('first_name', 'last_name', 'username', 'email')

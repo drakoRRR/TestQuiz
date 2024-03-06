@@ -3,7 +3,7 @@ from django.contrib.auth.views import LoginView
 from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView, UpdateView
 
-from .forms import UserLoginForm, UserRegisterForm
+from .forms import UserLoginForm, UserRegisterForm, ProfileForm
 from django.contrib.auth.models import User
 
 
@@ -33,4 +33,17 @@ class RegistrationView(CreateView):
     def form_invalid(self, form):
         messages.error(self.request, 'There was an error with username or password, check again !')
         return super().form_invalid(form)
+
+
+class ProfileView(UpdateView):
+    model = User
+    form_class = ProfileForm
+    template_name = 'users/profile.html'
+
+    def get_success_url(self):
+        return reverse_lazy('users:profile', args=(self.object.id,))
+
+    def form_valid(self, form):
+        form.save()
+        return super().form_valid(form)
 

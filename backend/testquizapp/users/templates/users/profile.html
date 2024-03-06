@@ -1,0 +1,52 @@
+{% extends 'users/base.html' %}
+{% load static %}
+
+{% block title %}
+   User Profile
+{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'users/css/user_profile_style.css' %}">
+    <!-- Подключаем стили Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+{% endblock %}
+
+{% block content %}
+
+{% include 'main_app/header.html' %}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-6">
+            <h2>User Profile</h2>
+            <p><strong>Name:</strong> {{ user.get_full_name }}</p>
+            <p><strong>Nickname:</strong> {{ user.username }}</p>
+            <p><strong>Tests Taken:</strong> {{ tests_taken }}</p>
+        </div>
+    </div>
+
+    <hr class="my-4"> <!-- Горизонтальная линия между профилем и тестами -->
+
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <h3>Test History</h3>
+            {% for test in test_history %}
+            <div class="card mb-3">
+                <div class="row no-gutters">
+                    <div class="col-md-4">
+                        <img src="{% static test.image %}" class="card-img" alt="Test Image">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ test.title }}</h5>
+                            <p class="card-text"><strong>Correct Answers:</strong> {{ test.correct_answers }}</p>
+                            <p class="card-text"><strong>Percentage:</strong> {{ test.percentage }}%</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
