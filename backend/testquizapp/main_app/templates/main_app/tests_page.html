@@ -13,24 +13,23 @@
 
 {% include 'main_app/header.html' %}
 
-<!-- Секция с тестами -->
 <section class="py-5">
     <div class="container">
         <h2 class="text-center mb-4">Тесты</h2>
         <div class="row">
-            <!-- Карточка теста -->
-            <div class="col-md-4 mb-4">
-                <div class="card">
-                    <img src="{% static 'path/to/test_image.jpg' %}" class="card-img-top" alt="Test Image">
-                    <div class="card-body">
-                        <h5 class="card-title">Название теста</h5>
-                        <p class="card-text">Количество вопросов: 20</p>
-                        <p class="card-text">Сложность: Средняя</p>
-                        <a href="#" class="btn btn-primary">Пройти тест</a>
+            {% for test in object_list %}
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <img src="{% static test.image.url %}" class="card-img-top" alt="Test Image">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ test.name }}</h5>
+                            <p class="card-text">Кількість питань: -</p>
+                            <p class="card-text">Складність: {{ test.complexity }}</p>
+                            <a href="#" class="btn btn-primary">Пройти тест</a>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <!-- Добавьте аналогичные блоки для других тестов -->
+            {% endfor %}
         </div>
     </div>
 </section>

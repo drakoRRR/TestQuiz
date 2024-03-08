@@ -1,14 +1,24 @@
-<header class="bg-primary text-white text-center py-2">
-    <div class="container d-flex align-items-center">
-        <form action="{% url 'users:logout' %}" method="post">
-            {% csrf_token %}
-            <button class="btn btn-danger">Logout</button>
-        </form>
-        <a href="{% url 'main_app:tests-page' %}" class="ml-auto">
-            <button class="btn btn-dark">Тести</button>
+<header class="bg-primary text-white py-3">
+    <div class="container d-flex align-items-center justify-content-between">
+        <a href="{% url 'main_app:tests-page' %}" class="text-white">
+            <h1>Тести</h1>
         </a>
-        <a href="{% url 'users:profile' user.id %}" class="ml-2">
-            <button class="btn btn-info">Профіль</button>
-        </a>
+
+        <nav>
+            <ul class="list-inline mb-0">
+                <li class="list-inline-item">
+                    <form action="{% url 'users:logout' %}" method="post">
+                        {% csrf_token %}
+                        <button class="btn btn-danger">Вийти</button>
+                    </form>
+                </li>
+                <li class="list-inline-item">
+                    <a href="{% url 'main_app:create-test' %}" class="btn btn-warning">Створити Тест</a>
+                </li>
+                <li class="list-inline-item">
+                    <a href="{% url 'users:profile' user.id %}" class="btn btn-info">Профіль</a>
+                </li>
+            </ul>
+        </nav>
     </div>
 </header>
