@@ -44,11 +44,17 @@ function displayFileName(input) {
 }
 
 function collectFormData() {
-    var questions = [];
+    let questions = [];
+    let len_questions = 0;
     $('.question').each(function () {
         let question = {};
+        len_questions++;
         question['question_name'] = $(this).find('input[name="questions[]"]').val();
-        question['question_image'] = $(this).find('input[name="questionImages[]"]').val();
+
+        let questionImageInput = $(this).find('input[name="questionImages[]"]')[0];
+        let questionImageFile = questionImageInput.files[0];
+        question['question_image'] = questionImageFile;
+
         question['question_type'] = $(this).find('select[name="questionTypes[]"]').val();
         question['is_free_answer'] = question['question_type'] === 'free';
         question['is_only_one_correct_answer'] = question['question_type'] === 'single';
@@ -59,35 +65,54 @@ function collectFormData() {
             let answer = {};
             answer['choice_name'] = $(this).find('input[name="answers[]"]').val();
             answer['is_correct'] = $(this).find('input[name="isCorrect"]').is(':checked');
-            answer['choice_image'] = $(this).find('input[name="answerImages[]"]').val();
+
+            let answerImageInput = $(this).find('input[name="answerImages[]"]')[0];
+            let answerImageFile = answerImageInput.files[0];
+            answer['choice_image'] = answerImageFile;
+
             question['question_choices'].push(answer);
         });
+        question['len_question_choices'] = question['question_choices'].length;
 
         questions.push(question);
     });
-    console.log(questions)
 
     let currentURL = window.location.href;
     let url = new URL(currentURL);
     let test_id = url.searchParams.get("test_id");
 
+    let formData = new FormData();
+    formData.append('test_id', test_id);
+    formData.append('questions_amount', len_questions.toString())
+
+    questions.forEach((question, index) => {
+        formData.append(`question_name[${index}]`, question['question_name']);
+        formData.append(`question_image[${index}]`, question['question_image']);
+        formData.append(`question_type[${index}]`, question['question_type']);
+        formData.append(`is_free_answer[${index}]`, question['is_free_answer']);
+        formData.append(`is_only_one_correct_answer[${index}]`, question['is_only_one_correct_answer']);
+        formData.append(`is_few_correct_answers[${index}]`, question['is_few_correct_answers']);
+        formData.append(`len_question_choices[${index}]`, question['len_question_choices']);
+
+        question['question_choices'].forEach((choice, choiceIndex) => {
+            formData.append(`questions[${index}]choice_name[${choiceIndex}]`, choice['choice_name']);
+            formData.append(`questions[${index}]is_correct[${choiceIndex}]`, choice['is_correct']);
+            formData.append(`questions[${index}]choice_image[${choiceIndex}]`, choice['choice_image']);
+        });
+    });
+
     $.ajax({
         url: '/api-create-question/',
         type: 'POST',
         headers: {'X-CSRFToken': $('[name="csrfmiddlewaretoken"]').val()},
-        data: JSON.stringify({
-            'test_id': test_id,
-            'questions': questions
-        }),
-        contentType: 'application/json',
+        data: formData,
+        processData: false,
+        contentType: false,
         success: function (response) {
-            // Handle the server response here
             console.log(response);
         },
         error: function (error) {
-            // Handle any errors that occur during the AJAX request
             console.error('AJAX Error:', error);
         }
     });
 }
-

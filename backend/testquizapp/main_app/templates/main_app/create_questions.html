@@ -19,7 +19,7 @@
 {##}
 {#        <button type="button" class="btn btn-primary mt-2" onclick="addQuestion()">Add Question</button>#}
 {#        <button type="submit" class="btn btn-success mt-2" onclick="collectFormData()">Create Test</button>#}
-    <form id="createTestForm" action="{% url 'main_app:tests-page' %}" onsubmit="collectFormData()">
+    <form id="createTestForm" action="{% url 'main_app:tests-page' %}" onsubmit="collectFormData()" enctype="multipart/form-data">
         {% csrf_token %}
 
         <div id="questionsContainer"></div>
