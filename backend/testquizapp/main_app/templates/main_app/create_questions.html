@@ -6,72 +6,7 @@
 {% endblock %}
 
 {% block styles %}
-    <link rel="stylesheet" href="{% static 'users/css/home_style.css' %}">
-    <style>
-        .create-test-container {
-            background-color: #ffffff;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .question {
-            border: 1px solid #ccc;
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 20px;
-            background-color: #f8f9fa;
-        }
-
-        .answer {
-            margin-bottom: 20px;
-        }
-
-        .answer label {
-            margin-right: 10px;
-        }
-
-        .file-input-wrapper {
-            position: relative;
-            overflow: hidden;
-            display: inline-block;
-        }
-
-        .file-input-wrapper input {
-            font-size: 100px;
-            position: absolute;
-            top: 0;
-            right: 0;
-            margin: 0;
-            padding: 0;
-            cursor: pointer;
-            opacity: 0;
-            filter: alpha(opacity=0);
-        }
-
-        .file-input-text {
-            margin-left: 10px;
-            display: inline-block;
-            max-width: 150px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        .add-answer-btn {
-            margin-top: 10px;
-        }
-
-        .btn-outline-primary {
-            border-color: #007bff;
-            color: #007bff;
-        }
-
-        .btn-outline-primary:hover {
-            background-color: #007bff;
-            color: #ffffff;
-        }
-    </style>
+    <link rel="stylesheet" href="{% static 'main_app/css/create_questions_styles.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -79,7 +14,13 @@
 
 <div class="create-test-container container mt-5">
     <h2>Create Test</h2>
-    <form id="createTestForm" action="/path/to/your/server/endpoint" method="POST" enctype="multipart/form-data">
+{#    {% csrf_token %}#}
+{#            <div id="questionsContainer"></div>#}
+{##}
+{#        <button type="button" class="btn btn-primary mt-2" onclick="addQuestion()">Add Question</button>#}
+{#        <button type="submit" class="btn btn-success mt-2" onclick="collectFormData()">Create Test</button>#}
+    <form id="createTestForm" action="{% url 'main_app:tests-page' %}" onsubmit="collectFormData()">
+        {% csrf_token %}
 
         <div id="questionsContainer"></div>
 
@@ -88,53 +29,7 @@
     </form>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-<script>
-    function addQuestion() {
-        var questionHtml = '<div class="question mb-3">' +
-                                '<label for="questionText">Question:</label>' +
-                                '<input type="text" class="form-control" name="questions[]" required>' +
-                                '<div class="file-input-wrapper mt-2">' +
-                                    '<label for="questionImage" class="btn btn-outline-primary">Upload Image</label>' +
-                                    '<input type="file" id="questionImage" name="questionImages[]" accept="image/*" onchange="displayFileName(this)">' +
-                                    '<span class="file-input-text"></span>' +
-                                '</div>' +
-                                '<label for="questionType" class="mt-2">Question Type:</label>' +
-                                '<select class="form-control" name="questionTypes[]">' +
-                                    '<option value="free">Вільна відповідь</option>' +
-                                    '<option value="single">Одна правильна відповідь</option>' +
-                                    '<option value="multiple">Декілька правильних відповідей</option>' +
-                                '</select>' +
-                                '<button type="button" class="btn btn-info mt-2 add-answer-btn" onclick="addAnswer(this)">Add Answer</button>' +
-                                '<div class="answersContainer mt-2"></div>' +
-                            '</div>';
-
-        $('#questionsContainer').append(questionHtml);
-    }
-
-    function addAnswer(button) {
-        var answerHtml = '<div class="answer">' +
-                            '<label for="answerText">Answer:</label>' +
-                            '<input type="text" class="form-control" name="answers[]" required>' +
-                            '<div class="file-input-wrapper mt-2">' +
-                                '<label for="answerImage" class="btn btn-outline-primary">Upload Image</label>' +
-                                '<input type="file" id="answerImage" name="answerImages[]" accept="image/*" onchange="displayFileName(this)">' +
-                                '<span class="file-input-text"></span>' +
-                            '</div>' +
-                            '<div class="form-check mt-2">' +
-                                '<input type="checkbox" class="form-check-input" name="isCorrect">' +
-                                '<label class="form-check-label" for="isCorrect">Correct Answer</label>' +
-                            '</div>' +
-                         '</div>';
-
-        $(button).siblings('.answersContainer').append(answerHtml);
-    }
-
-    // Display selected file name
-    function displayFileName(input) {
-        var fileName = input.files[0].name;
-        $(input).siblings('.file-input-text').text(fileName);
-    }
-</script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="{% static 'main_app/js/create_questions.js' %}"></script>
 
 {% endblock %}

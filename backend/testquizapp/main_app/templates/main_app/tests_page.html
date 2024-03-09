@@ -5,22 +5,18 @@
    Home Page
 {% endblock %}
 
-{% block styles %}
-    <link rel="stylesheet" href="{% static 'users/css/home_style.css' %}">
-{% endblock %}
-
 {% block content %}
 
 {% include 'main_app/header.html' %}
 
 <section class="py-5">
     <div class="container">
-        <h2 class="text-center mb-4">Тесты</h2>
+        <h2 class="text-center mb-4">Тести</h2>
         <div class="row">
             {% for test in object_list %}
                 <div class="col-md-4 mb-4">
                     <div class="card">
-                        <img src="{% static test.image.url %}" class="card-img-top" alt="Test Image">
+                        <img src="{% if test.image %}{{ test.image.url }}{% endif %}" class="card-img-top" alt="Test Image">
                         <div class="card-body">
                             <h5 class="card-title">{{ test.name }}</h5>
                             <p class="card-text">Кількість питань: -</p>

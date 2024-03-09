@@ -6,96 +6,7 @@
 {% endblock %}
 
 {% block styles %}
-    <link rel="stylesheet" href="{% static 'users/css/home_style.css' %}">
-    <style>
-        body {
-            background-color: #f8f9fa;
-        }
-
-        .page-container {
-            margin-top: 50px;
-        }
-
-        .form-container {
-            background-color: #ffffff;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            margin-top: 20px;
-        }
-
-        h2 {
-            color: #007bff;
-            margin-bottom: 30px;
-        }
-
-        form {
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        label {
-            font-weight: bold;
-            display: block;
-            margin-bottom: 5px;
-        }
-
-        input[type="text"],
-        input[type="number"],
-        input[type="file"] {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            margin-top: 5px;
-        }
-
-        .file-input-wrapper {
-            position: relative;
-            overflow: hidden;
-            display: inline-block;
-        }
-
-        .file-input-wrapper input {
-            font-size: 100px;
-            position: absolute;
-            top: 0;
-            right: 0;
-            margin: 0;
-            padding: 0;
-            cursor: pointer;
-            opacity: 0;
-            filter: alpha(opacity=0);
-        }
-
-        .file-input-text {
-            margin-left: 10px;
-            display: inline-block;
-            max-width: 150px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        button {
-            background-color: #007bff;
-            color: #ffffff;
-            padding: 10px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            width: 100%;
-            display: inline-block;
-        }
-
-        button:hover {
-            background-color: #0056b3;
-        }
-    </style>
+    <link rel="stylesheet" href="{% static 'main_app/css/create_test_style.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -123,7 +34,7 @@
                 <label for="{{ form.image.id_for_label }}">Test Image:</label>
                 <div class="file-input-wrapper">
                     <label for="testImage" class="btn btn-outline-primary">Upload Image</label>
-                    <input type="file" id="testImage" name="testImage" accept="image/*" onchange="displayFileName(this)">
+                    {{ form.image }}
                     <span class="file-input-text"></span>
                 </div>
             </div>

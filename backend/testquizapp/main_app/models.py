@@ -19,6 +19,7 @@ class TestQuiz(models.Model):
 class Question(models.Model):
     """Question's for the test."""
 
+    test_quiz = models.ForeignKey(TestQuiz, on_delete=models.CASCADE, default=None)
     image = models.ImageField(upload_to='user_tests', null=True, blank=True)
     text = models.TextField()
     is_free_answer = models.BooleanField(default=False)
