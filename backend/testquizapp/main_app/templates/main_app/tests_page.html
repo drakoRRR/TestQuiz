@@ -1,5 +1,6 @@
 {% extends 'users/base.html' %}
 {% load static %}
+{% load get_value_dict %}
 
 {% block title %}
    Home Page
@@ -20,9 +21,9 @@
                         <div class="card-body">
                             <h5 class="card-title">{{ test.name }}</h5>
                             <p class="card-text">Опис: {{ test.description|truncatewords:30 }}</p>
-                            <p class="card-text">Кількість питань: -</p>
+                            <p class="card-text">Кількість питань: {{ tests_qty_questions|hash:test.id }}</p>
                             <p class="card-text">Складність: {{ test.complexity }}</p>
-                            <a href="#" class="btn btn-primary">Пройти тест</a>
+                            <a href="{% url 'main_app:test-process' test.id %}" class="btn btn-primary">Пройти тест</a>
                         </div>
                     </div>
                 </div>

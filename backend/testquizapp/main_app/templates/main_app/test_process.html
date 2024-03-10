@@ -1,0 +1,61 @@
+{% extends 'users/base.html' %}
+{% load static %}
+{% load get_value_dict %}
+
+{% block title %}
+   Testing page
+{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'main_app/css/test_process_styles.csss' %}">
+{% endblock %}
+
+{% block content %}
+    {% include 'main_app/header.html' %}
+    <body>
+    <section class="container mt-4">
+        {% for question in object_list %}
+            <div class="card mb-4">
+                <div class="card-header">
+                    {% if question.is_few_correct_answers %}
+                        Питання н (декілька правильних відповідей)
+                    {% elif question.is_only_one_correct_answer %}
+                        Питання n (тільки одна правильна відповідь)
+                    {% else %}
+                        Питання n (вільна відповідь)
+                    {% endif %}
+                </div>
+                <div class="card-body">
+                    <p>{{ question.text }}</p>
+                    {% if question.image %}
+                        <img src="{{ question.image.url }}" class="img-fluid" alt="Иллюстрация">{% endif %}
+
+                    {% if question.is_free_answer %}
+                        {% for answer in choices_to_question|hash:question.id %}
+                            <div class="form-check">
+                                <label for="freeResponse">Ваша відповідь:</label>
+                                <textarea class="form-control" id="freeResponse" rows="2"></textarea>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        {% for answer in choices_to_question|hash:question.id %}
+                            <div class="form-check">
+                                <input type="radio" class="form-check-input" id="answer1" name="question1"
+                                       value="option1">
+                                <label class="form-check-label" for="answer1"> {{ answer.text }} {% if answer.image %}
+                                    <img src="{{ answer.image.url }}" class="img-thumbnail"
+                                         alt="Иллюстрация 1">{% endif %}</label>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+
+        <div class="text-center mt-4">
+            <button type="button" class="btn btn-primary">Перевірити</button>
+        </div>
+    </section>
+
+
+{% endblock %}
