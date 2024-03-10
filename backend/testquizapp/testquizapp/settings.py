@@ -34,6 +34,7 @@ INSTALLED_APPS = [
 
     'corsheaders',
     'rest_framework',
+    'drf_spectacular',
 
     'users',
     'main_app'
@@ -142,3 +143,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:56745",
     "http://127.0.0.1:56745",
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema'
+}
