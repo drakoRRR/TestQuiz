@@ -14,11 +14,6 @@
 
 <div class="create-test-container container mt-5">
     <h2>Create Test</h2>
-{#    {% csrf_token %}#}
-{#            <div id="questionsContainer"></div>#}
-{##}
-{#        <button type="button" class="btn btn-primary mt-2" onclick="addQuestion()">Add Question</button>#}
-{#        <button type="submit" class="btn btn-success mt-2" onclick="collectFormData()">Create Test</button>#}
     <form id="createTestForm" action="{% url 'main_app:tests-page' %}" onsubmit="collectFormData()" enctype="multipart/form-data">
         {% csrf_token %}
 

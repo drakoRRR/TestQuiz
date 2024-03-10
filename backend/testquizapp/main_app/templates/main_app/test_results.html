@@ -1,0 +1,15 @@
+{% extends 'users/base.html' %}
+{% load static %}
+{% load get_value_dict %}
+
+{% block title %}
+   Testing page
+{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static '' %}">
+{% endblock %}
+
+{% block content %}
+    {% include 'main_app/header.html' %}
+{% endblock %}
