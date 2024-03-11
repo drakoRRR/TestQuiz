@@ -115,3 +115,20 @@ class TestResultsViewTestCase(TestCase):
         self.assertEquals(UserTestResult.objects.get(user=self.user, test_quiz_id=self.test_quiz_id).correct_questions, 2)
 
 
+class TestDeleteTestQuizView(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(username='testuser', password='testpassword')
+        self.client.login(username='testuser', password='testpassword')
+        self.test_quiz_id = TestQuiz.objects.create(
+            name='Test name',
+            description='test description',
+            complexity=7,
+            user=self.user
+        ).id
+
+    def test_delete_test_by_user(self):
+        """Test when user delete the testquiz that created."""
+
+        response = self.client.get(reverse('main_app:delete_test', args=[self.test_quiz_id]))
+        self.assertEqual(response.status_code, status.HTTP_302_FOUND)
+        self.assertFalse(TestQuiz.objects.filter(id=self.test_quiz_id))
