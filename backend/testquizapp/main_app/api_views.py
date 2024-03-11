@@ -14,7 +14,6 @@ class GetQuestions(views.APIView):
     parser_classes = (MultiPartParser, FormParser)
 
     def post(self, request):
-        print(request.data)
         questions_count = request.data.get('questions_amount')
 
         for i in range(int(questions_count)):

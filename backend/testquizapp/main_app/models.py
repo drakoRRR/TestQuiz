@@ -6,6 +6,7 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 class TestQuiz(models.Model):
     """Test quiz for storing what test it is."""
 
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
     name = models.CharField(max_length=256)
     description = models.TextField(null=True, blank=True)
     image = models.ImageField(upload_to='user_tests', null=True, blank=True)
@@ -46,7 +47,8 @@ class UserTestResult(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     test_quiz = models.ForeignKey(TestQuiz, on_delete=models.CASCADE)
     date_completed = models.DateTimeField(auto_now_add=True)
-    score = models.IntegerField()
+    correct_questions = models.IntegerField(default=0, blank=True, null=True)
+    score = models.FloatField()
     is_passed = models.BooleanField(default=False, blank=True, null=True)
 
     def __str__(self):

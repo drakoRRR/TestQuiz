@@ -14,5 +14,5 @@ urlpatterns = [
     path('api-create-question/', api_views.GetQuestions.as_view(), name='api-create-question'),
 
     path('test-process/<int:test_id>/', views.TestProcessView.as_view(), name='test-process'),
-    path('test-results/<int:test_id>/', views.calculate_test_results, name='test-results'),
+    path('test-results/<int:test_id>/', views.TestResultsView.as_view(), name='test-results'),
 ]

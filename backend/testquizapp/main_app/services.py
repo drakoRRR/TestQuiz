@@ -1,6 +1,6 @@
 from ast import literal_eval as li
 
-from .models import Question, Choice
+from .models import Question, Choice, UserTestResult
 
 
 class CreateQuestionService:
@@ -56,3 +56,87 @@ class CreateChoiceService:
         return choice
 
 
+class CalculateResults:
+    """Calculate score in test."""
+
+    def __init__(self, test_id, request):
+        self.score = 0
+        self.correct_questions = 0
+        self.test_id = test_id
+        self.request = request
+        self.question_ids = Question.objects.filter(test_quiz_id=test_id).values_list('id', flat=True)
+        self.questions_dict = self.get_question_dict()
+
+    def get_results_of_test(self):
+        """Get total results(score) of test."""
+        print(self.request.POST)
+        for question_id in self.question_ids:
+            if self.questions_dict[question_id]['is_free_answer']:
+
+                self.calculate_free_answer(question_id)
+                continue
+
+            self.calculate_few_or_one_answers(question_id)
+
+        return self.save_results()
+
+    def save_results(self):
+        """Save results of test in model UserTestResult."""
+        return UserTestResult.objects.create(
+            user_id=self.request.user.id,
+            test_quiz_id=self.test_id,
+            score=self.score,
+            correct_questions=self.correct_questions
+        )
+
+    def calculate_free_answer(self, question_id):
+        """Calculate point of free answer."""
+        choice_key_id = None
+
+        for key in dict(self.request.POST).keys():
+            if key.startswith(f'user_answer_{question_id} '):
+                choice_key_id = key.split()[-1]
+                break
+
+        user_answer = self.request.POST[f'user_answer_{question_id} {choice_key_id}']
+        choice_answer = Choice.objects.get(id=choice_key_id).text
+
+        if user_answer.strip().lower() == choice_answer.strip().lower():
+            self.score += 2
+            self.correct_questions += 1
+
+    def calculate_few_or_one_answers(self, question_id):
+        """Calculate point of few options type question and one correct type question."""
+        choice_answer_id = list(map(int, dict(self.request.POST)[f'user_answer_{question_id}']))
+
+        if len(choice_answer_id) == 1:
+            is_correct = Choice.objects.get(id=choice_answer_id[0]).is_correct
+            if is_correct:
+                self.score += 1
+                self.correct_questions += 1
+        else:
+            coefficient = 2 / len(choice_answer_id)
+            score_by_question = 0
+            for choice_id in choice_answer_id:
+                is_correct = Choice.objects.get(id=choice_id).is_correct
+                if is_correct:
+                    score_by_question += coefficient
+
+            if score_by_question > 0.8:
+                self.score += score_by_question
+                self.correct_questions += 1
+
+    def get_question_dict(self):
+        """Get question dict with type of answers."""
+        questions = Question.objects.filter(test_quiz_id=self.test_id).values(
+            'id',
+            'is_free_answer',
+            'is_only_one_correct_answer',
+            'is_few_correct_answers'
+        )
+
+        questions_dict = dict()
+        for question in questions:
+            questions_dict[question['id']] = question
+
+        return questions_dict

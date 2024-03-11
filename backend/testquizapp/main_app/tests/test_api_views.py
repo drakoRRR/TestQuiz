@@ -1,18 +1,21 @@
 from django.test import TestCase
 from django.urls import reverse
 from rest_framework import status
+from django.contrib.auth.models import User
 
 from rest_framework.test import APIClient
 
 from main_app.models import TestQuiz, Question, Choice
 
 class TestApiViews(TestCase):
-    def setUp(self) -> None:
+    def setUp(self):
         self.client = APIClient()
+        self.user = User.objects.create_user(username='testuser', password='testpassword')
         test_quiz = TestQuiz.objects.create(
             name='Test name',
             description='test description',
-            complexity=7
+            complexity=7,
+            user=self.user
         ).id
         self.test_id = str(test_quiz)
 
