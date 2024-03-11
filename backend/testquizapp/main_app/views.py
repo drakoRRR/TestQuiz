@@ -1,5 +1,6 @@
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView, TemplateView
 from .forms import TestQuizForm
 from .models import TestQuiz, Choice, Question
@@ -79,4 +80,32 @@ class TestResultsView(View):
 
     def get(self, request, *args, **kwargs):
         return render(request, template_name=self.template_name)
+
+
+class OwnTestsUserView(ListView):
+    model = TestQuiz
+    template_name = 'main_app/own_tests_user.html'
+
+    def get_queryset(self):
+        queryset = super(OwnTestsUserView, self).get_queryset()
+        return queryset.filter(user=self.request.user)
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(OwnTestsUserView, self).get_context_data(**kwargs)
+
+        test_ids = TestQuiz.objects.all().values_list('id', flat=True)
+        max_possible_score_dict = dict()
+
+        for test_id in test_ids:
+            max_possible_score_dict[test_id] = get_max_possible_score(test_id)
+
+        context['max_possible_score_dict'] = max_possible_score_dict
+
+        return context
+
+
+class DeleteTestQuizView(View):
+    def get(self, request, test_id, *args, **kwargs):
+        TestQuiz.objects.get(id=test_id).delete()
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 

@@ -3,7 +3,7 @@
 {% load get_value_dict %}
 
 {% block title %}
-   User Profile
+   Own Tests
 {% endblock %}
 
 {% block styles %}
@@ -20,31 +20,24 @@
 {% include 'main_app/header.html' %}
 
 <div class="container mt-4">
- <div class="row">
-        <div class="col-md-6">
-            <h2>User Profile</h2>
-            <p><strong>Name:</strong> {{ user.get_full_name }}</p>
-            <p><strong>Nickname:</strong> {{ user.username }}</p>
-            <p><strong>Tests Taken:</strong> {{ test_history|length }}</p>
-            <a href="{% url 'main_app:user-tests' %}" class="btn btn-primary">Ваші створені тести</a>
-        </div>
-    </div>
-
     <div class="row mt-4">
         <div class="col-md-12">
-            <h3>Test History</h3>
-            {% for test in test_history|slice:5 %}
+            <h3>Ваші тести</h3>
+            {% for test in object_list %}
             <div class="card test-card">
                 <div class="row no-gutters">
                     <div class="col-md-4">
-                        <img src="{% if test.test_quiz.image %}{{ test.test_quiz.image.url }}{% else %}{% static 'main_app/images/test-quiz.jpg' %}{% endif %}" class="card-img fixed-image" alt="Test Image">
+                        <img src="{% if test.image %}{{ test.image.url }}{% else %}{% static 'main_app/images/test-quiz.jpg' %}{% endif %}" class="card-img fixed-image" alt="Test Image">
                     </div>
                     <div class="col-md-8">
                         <div class="card-body">
-                            <h5 class="card-title">{{ test.test_quiz.name }}</h5>
+                            <h5 class="card-title">{{ test.name }}</h5>
                             <p class="card-text"><strong>Date:</strong> {{ test.date_completed }}</p>
                             <p class="card-text"><strong>Correct Answers:</strong> {{ test.correct_questions }}</p>
-                            <p class="card-text"><strong>Score:</strong> {{ test.score|default:0|add:0 }}/{{ max_possible_score_dict|hash:test.test_quiz.id }}</p>
+                            <p class="card-text"><strong>Score:</strong> {{ test.score|default:0|add:0 }}/{{ max_possible_score_dict|hash:test.id }}</p>
+                            <a href="{% url 'main_app:delete_test' test.id %}">
+                                <button class="btn btn-danger delete-button float-right mb-2">Delete</button>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -53,5 +46,7 @@
         </div>
     </div>
 </div>
+
+
 
 {% endblock %}

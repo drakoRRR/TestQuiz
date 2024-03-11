@@ -11,8 +11,11 @@ urlpatterns = [
     path('create-test/', login_required(views.CreateTestView.as_view()), name='create-test'),
     path('create-question/', views.CreateQuestionsView.as_view(), name='create-question'),
 
+    path('delete_test/<int:test_id>/', views.DeleteTestQuizView.as_view(), name='delete_test'),
+
     path('api-create-question/', api_views.GetQuestions.as_view(), name='api-create-question'),
 
     path('test-process/<int:test_id>/', views.TestProcessView.as_view(), name='test-process'),
     path('test-results/<int:test_id>/', views.TestResultsView.as_view(), name='test-results'),
+    path('user-tests/', views.OwnTestsUserView.as_view(), name='user-tests'),
 ]
