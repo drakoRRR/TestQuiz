@@ -1,15 +1,25 @@
 {% extends 'users/base.html' %}
 {% load static %}
-{% load get_value_dict %}
 
 {% block title %}
    Testing page
 {% endblock %}
 
 {% block styles %}
-    <link rel="stylesheet" href="{% static '' %}">
+    <link rel="stylesheet" href="{% static 'main_app/css/test_results_styles.css' %}">
 {% endblock %}
 
 {% block content %}
     {% include 'main_app/header.html' %}
+
+    <div class="container result-container text-center">
+        <h2 class="result-heading mt-4">Результаты теста</h2>
+        <img src="{% static 'main_app/images/finish.png' %}" alt="Test Image" class="img-fluid test-image mt-4">
+        <p class="user-info mt-4">Користувач: {{ result.user.username }}</p>
+        <p class="user-info">Дата проходження: {{ result.date_completed }}</p>
+        <p class="result-info">Правильних відповідей: {{ result.correct_questions }} из {{ questions_count }}</p>
+        <p class="result-info">Загальний бал: {{ result.score|default:0|add:0 }}/{{ max_possible_score }}</p>
+
+        <a href="{% url 'main_app:tests-page' %}" class="btn btn-primary btn-back mx-auto mt-4">Повернутися на головне меню</a>
+    </div>
 {% endblock %}

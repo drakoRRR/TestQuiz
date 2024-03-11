@@ -1,0 +1,32 @@
+.result-container {
+    max-width: 600px;
+    margin: 20px auto;
+    background-color: #ffffff;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    font-family: 'Helvetica', sans-serif;
+}
+
+.result-heading {
+    color: #007bff;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.test-image {
+    width: 100%;
+    border-radius: 5px;
+    margin-top: 20px;
+}
+
+.user-info, .result-info {
+    margin-bottom: 10px;
+    font-size: 20px;
+}
+
+.btn-back {
+    margin-top: 20px;
+    font-size: 18px;
+}

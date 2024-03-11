@@ -69,7 +69,6 @@ class CalculateResults:
 
     def get_results_of_test(self):
         """Get total results(score) of test."""
-        print(self.request.POST)
         for question_id in self.question_ids:
             if self.questions_dict[question_id]['is_free_answer']:
 

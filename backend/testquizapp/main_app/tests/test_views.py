@@ -84,8 +84,8 @@ class TestResultsViewTestCase(TestCase):
             text='Answer 6'
         )
 
-    def test_get_results(self):
-        """Test when user passes the test and get the results."""
+    def test_get_results_all_right(self):
+        """Test when user passes the test and get the results(all answers are correct)."""
 
         payload = {
             f'user_answer_{self.question1.id}': self.answer1.id,  # +1 score
@@ -98,5 +98,20 @@ class TestResultsViewTestCase(TestCase):
         self.assertTrue(UserTestResult.objects.filter(user=self.user, test_quiz_id=self.test_quiz_id).exists())
         self.assertEquals(UserTestResult.objects.get(user=self.user, test_quiz_id=self.test_quiz_id).score, 5)
         self.assertEquals(UserTestResult.objects.get(user=self.user, test_quiz_id=self.test_quiz_id).correct_questions, 3)
+
+    def test_get_results_with_mistake(self):
+        """Test when user passes the test and get the results(one mistake)."""
+
+        payload = {
+            f'user_answer_{self.question1.id}': self.answer2.id,  # +0 score
+            f'user_answer_{self.question2.id}': [self.answer3.id, self.answer4.id],  # +2 score
+            f'user_answer_{self.question3.id} {self.answer6.id}': 'Answer 6'  # +2 score
+        }
+
+        response = self.client.post(reverse('main_app:test-results', args=[self.test_quiz_id]), data=payload)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertTrue(UserTestResult.objects.filter(user=self.user, test_quiz_id=self.test_quiz_id).exists())
+        self.assertEquals(UserTestResult.objects.get(user=self.user, test_quiz_id=self.test_quiz_id).score, 4)
+        self.assertEquals(UserTestResult.objects.get(user=self.user, test_quiz_id=self.test_quiz_id).correct_questions, 2)
 
 

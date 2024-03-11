@@ -27,11 +27,11 @@
             <div class="card mb-4">
                 <div class="card-header">
                     {% if question.is_few_correct_answers %}
-                        Питання н (декілька правильних відповідей)
+                        Питання (декілька правильних відповідей) <strong>+0.8-2 бали</strong>
                     {% elif question.is_only_one_correct_answer %}
-                        Питання n (тільки одна правильна відповідь)
+                        Питання (тільки одна правильна відповідь) <strong>+1 бали</strong>
                     {% else %}
-                        Питання n (вільна відповідь)
+                        Питання (вільна відповідь) <strong>+2 бали</strong>
                     {% endif %}
                 </div>
                 <div class="card-body">
