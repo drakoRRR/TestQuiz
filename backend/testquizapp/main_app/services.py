@@ -139,3 +139,18 @@ class CalculateResults:
             questions_dict[question['id']] = question
 
         return questions_dict
+
+
+def get_max_possible_score(test_id=None):
+    """Get max possible score on test"""
+
+    max_possible_score = 0
+
+    for question in Question.objects.filter(test_quiz_id=test_id):
+        if question.is_free_answer or question.is_few_correct_answers:
+            max_possible_score += 2
+            continue
+        if question.is_only_one_correct_answer:
+            max_possible_score += 1
+
+    return max_possible_score

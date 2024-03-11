@@ -6,7 +6,7 @@ from .models import TestQuiz, Choice, Question
 from django.db.models import Count
 from django.views import View
 
-from .services import CalculateResults
+from .services import CalculateResults, get_max_possible_score
 
 
 class TestsPageView(ListView):
@@ -70,18 +70,10 @@ class TestResultsView(View):
     template_name = 'main_app/test_results.html'
 
     def post(self, request, test_id, *args, **kwargs):
-        max_possible_score = 0
-        for question in Question.objects.all():
-            if question.is_free_answer or question.is_few_correct_answers:
-                max_possible_score += 2
-                continue
-            if question.is_only_one_correct_answer:
-                max_possible_score += 1
-
         context = dict(
             result=CalculateResults(test_id=test_id, request=request).get_results_of_test(),
             questions_count=Question.objects.filter(test_quiz_id=test_id).count(),
-            max_possible_score=max_possible_score
+            max_possible_score=get_max_possible_score(test_id)
         )
         return render(request, template_name=self.template_name, context=context)
 

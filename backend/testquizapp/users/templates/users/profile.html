@@ -1,14 +1,19 @@
 {% extends 'users/base.html' %}
 {% load static %}
+{% load get_value_dict %}
 
 {% block title %}
    User Profile
 {% endblock %}
 
 {% block styles %}
-    <link rel="stylesheet" href="{% static 'users/css/user_profile_style.css' %}">
-    <!-- Подключаем стили Bootstrap -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'path/to/bootstrap/css/bootstrap.min.css' %}">
+    <style>
+        /* Add your custom styles here if needed */
+        .test-card {
+            margin-bottom: 20px;
+        }
+    </style>
 {% endblock %}
 
 {% block content %}
@@ -16,31 +21,31 @@
 {% include 'main_app/header.html' %}
 
 <div class="container mt-4">
-    <div class="row">
+ <div class="row">
         <div class="col-md-6">
             <h2>User Profile</h2>
             <p><strong>Name:</strong> {{ user.get_full_name }}</p>
             <p><strong>Nickname:</strong> {{ user.username }}</p>
-            <p><strong>Tests Taken:</strong> {{ tests_taken }}</p>
+            <p><strong>Tests Taken:</strong> {{ test_history|length }}</p>
+            <a href="#" class="btn btn-primary">Ваші створені тести</a>
         </div>
     </div>
-
-    <hr class="my-4"> <!-- Горизонтальная линия между профилем и тестами -->
 
     <div class="row mt-4">
         <div class="col-md-12">
             <h3>Test History</h3>
-            {% for test in test_history %}
-            <div class="card mb-3">
+            {% for test in test_history|slice:5 %}
+            <div class="card test-card">
                 <div class="row no-gutters">
                     <div class="col-md-4">
-                        <img src="{% static test.image %}" class="card-img" alt="Test Image">
+                        <img src="{% if test.test_quiz.image %}{{ test.test_quiz.image.url }}{% else %}{% static 'main_app/images/test-quiz.jpg' %}{% endif %}" class="card-img fixed-image" alt="Test Image">
                     </div>
                     <div class="col-md-8">
                         <div class="card-body">
-                            <h5 class="card-title">{{ test.title }}</h5>
-                            <p class="card-text"><strong>Correct Answers:</strong> {{ test.correct_answers }}</p>
-                            <p class="card-text"><strong>Percentage:</strong> {{ test.percentage }}%</p>
+                            <h5 class="card-title">{{ test.test_quiz.name }}</h5>
+                            <p class="card-text"><strong>Date:</strong> {{ test.date_completed }}</p>
+                            <p class="card-text"><strong>Correct Answers:</strong> {{ test.correct_questions }}</p>
+                            <p class="card-text"><strong>Score:</strong> {{ test.score|default:0|add:0 }}/{{ max_possible_score_dict|hash:test.test_quiz.id }}</p>
                         </div>
                     </div>
                 </div>
@@ -49,4 +54,5 @@
         </div>
     </div>
 </div>
+
 {% endblock %}

@@ -6,6 +6,9 @@ from django.views.generic.edit import CreateView, UpdateView
 from .forms import UserLoginForm, UserRegisterForm, ProfileForm
 from django.contrib.auth.models import User
 
+from main_app.models import UserTestResult, TestQuiz
+from main_app.services import get_max_possible_score
+
 
 # Create your views here.
 class LoginUserView(LoginView):
@@ -46,4 +49,18 @@ class ProfileView(UpdateView):
     def form_valid(self, form):
         form.save()
         return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super(ProfileView, self).get_context_data(**kwargs)
+        context['test_history'] = UserTestResult.objects.filter(user=self.request.user)
+
+        test_ids = TestQuiz.objects.all().values_list('id', flat=True)
+        max_possible_score_dict = dict()
+
+        for test_id in test_ids:
+            max_possible_score_dict[test_id] = get_max_possible_score(test_id)
+
+        context['max_possible_score_dict'] = max_possible_score_dict
+
+        return context
 
