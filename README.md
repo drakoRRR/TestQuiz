@@ -84,3 +84,7 @@ After creating a test, you can add any types of answers and any quantity you wan
 # Profile page
 
 ![image](media_for_readme/profile_page.png)
+
+# API Documentation
+
+![image](media_for_readme/api_doc.png)
