@@ -17,6 +17,14 @@ services:
              python manage.py runserver 0.0.0.0:8000"
     depends_on:
       - db
+      - es
+
+  es:
+    image: elasticsearch:8.12.1
+    ports:
+      - "9200:9200"
+    environment:
+      - discovery.type=single-noe
 
   db:
     image: postgres:13-alpine
