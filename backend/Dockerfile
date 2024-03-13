@@ -23,12 +23,12 @@ RUN python -m venv /py && \
     adduser \
         --disabled-password \
         --no-create-home \
-        test_quiz_app
+        test_quiz_app && \
+    mkdir -p /vol/backend/media && \
+    chown -R test_quiz_app:test_quiz_app /code /vol
 
 ENV PATH="/py/bin:$PATH"
 
 USER test_quiz_app
 
 COPY ./testquizapp /code
-
-
