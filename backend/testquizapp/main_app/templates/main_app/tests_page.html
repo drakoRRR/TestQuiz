@@ -26,9 +26,9 @@
 
 <section class="py-5">
     <div class="container">
-        <h2 class="text-center mb-4">{% if not search_tests %}Тести{% else %}Тести за пошуком: {{ search_query }}{% endif %}</h2>
+        <h2 class="text-center mb-4">{% if not search %}Тести{% else %}Тести за пошуком: {{ search_query }}{% endif %}</h2>
         <div class="row">
-        {% if not search_tests %}
+        {% if not search %}
             {% for test in object_list %}
                 <div class="col-md-4 mb-4">
                     <div class="card h-100">

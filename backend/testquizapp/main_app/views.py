@@ -119,7 +119,8 @@ class TestSearchView(View):
 
         context = dict(
             search_tests=TestQuiz.objects.filter(id__in=test_ids),
-            search_query=str(search_query)
+            search_query=str(search_query),
+            search=True
         )
 
         context['tests_qty_questions'] = dict(
