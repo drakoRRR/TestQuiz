@@ -24,7 +24,9 @@ services:
     ports:
       - "9200:9200"
     environment:
-      - discovery.type=single-noe
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - http.cors.allow-origin="*"
 
   db:
     image: postgres:13-alpine
