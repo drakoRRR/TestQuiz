@@ -2,6 +2,8 @@ from ast import literal_eval as li
 
 from .models import Question, Choice, UserTestResult
 
+from .documents import TestQuizDocument
+
 
 class CreateQuestionService:
     """Create question service."""
@@ -154,3 +156,17 @@ def get_max_possible_score(test_id=None):
             max_possible_score += 1
 
     return max_possible_score
+
+
+def get_ids_to_search(search_query):
+    """Get ids to search from elasticsearch."""
+    s = TestQuizDocument.search().filter('match', name=search_query).to_queryset().order_by('name').distinct('name')
+    tests_names = []
+    test_ids = []
+
+    for hit in s:
+        if hit.name not in tests_names:
+            test_ids.append(hit.id)
+            tests_names.append(hit.name)
+
+    return test_ids

@@ -5,6 +5,7 @@ from main_app.models import TestQuiz, Question, Choice, UserTestResult
 
 from rest_framework import status
 
+
 class CreateTestViewTestCase(TestCase):
     def setUp(self):
         self.user = User.objects.create_user(username='testuser', password='testpassword')

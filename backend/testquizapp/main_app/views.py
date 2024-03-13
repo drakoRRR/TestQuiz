@@ -1,13 +1,13 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from django.urls import reverse, reverse_lazy
-from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView, TemplateView
+from django.urls import reverse
+from django.views.generic import ListView, CreateView, TemplateView
 from .forms import TestQuizForm
 from .models import TestQuiz, Choice, Question
 from django.db.models import Count
 from django.views import View
 
-from .services import CalculateResults, get_max_possible_score
+from .services import CalculateResults, get_max_possible_score, get_ids_to_search
 
 
 class TestsPageView(ListView):
@@ -108,4 +108,25 @@ class DeleteTestQuizView(View):
     def get(self, request, test_id, *args, **kwargs):
         TestQuiz.objects.get(id=test_id).delete()
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+
+class TestSearchView(View):
+    template_name = 'main_app/tests_page.html'
+
+    def post(self, request, *args, **kwargs):
+        search_query = str(dict(request.POST)['search_query'][0])
+        test_ids = get_ids_to_search(search_query)
+
+        context = dict(
+            search_tests=TestQuiz.objects.filter(id__in=test_ids),
+            search_query=str(search_query)
+        )
+
+        context['tests_qty_questions'] = dict(
+            Question.objects.values('test_quiz_id').annotate(
+                questions_count=Count('id')
+            ).values_list('test_quiz_id', 'questions_count')
+        )
+
+        return render(request, self.template_name, context)
 

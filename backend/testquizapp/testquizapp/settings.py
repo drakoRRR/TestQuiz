@@ -35,6 +35,7 @@ INSTALLED_APPS = [
 
     'corsheaders',
     'rest_framework',
+    'django_elasticsearch_dsl',
     'drf_spectacular',
 
     'users',
@@ -147,4 +148,10 @@ CORS_ALLOWED_ORIGINS = [
 
 REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema'
+}
+
+ELASTICSEARCH_DSL = {
+    'default': {
+        'hosts': ["http://localhost:9200"],
+    }
 }

@@ -13,6 +13,8 @@ urlpatterns = [
 
     path('delete_test/<int:test_id>/', views.DeleteTestQuizView.as_view(), name='delete_test'),
 
+    path('test-search/', views.TestSearchView.as_view(), name='test-search'),
+
     path('api-create-question/', api_views.GetQuestions.as_view(), name='api-create-question'),
 
     path('test-process/<int:test_id>/', views.TestProcessView.as_view(), name='test-process'),
