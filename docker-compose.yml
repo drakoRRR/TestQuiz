@@ -33,10 +33,7 @@ services:
     restart: always
     volumes:
       - dev-db-data:/var/lib/postgresql/data
-    environment:
-      - POSTGRES_DB=${DB_NAME}
-      - POSTGRES_USER=${DB_USER}
-      - POSTGRES_PASSWORD=${DB_PASSWORD}
+    env_file: /docker/.env
     ports:
       - "5432:5432"
 
