@@ -34,9 +34,9 @@ services:
     volumes:
       - dev-db-data:/var/lib/postgresql/data
     environment:
-      - POSTGRES_DB=test_quiz_db
-      - POSTGRES_USER=test_quiz_app
-      - POSTGRES_PASSWORD=123456789
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
     ports:
       - "5432:5432"
 
