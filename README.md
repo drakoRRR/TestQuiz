@@ -14,9 +14,9 @@ Before starting the project, you need to set .env file to ./docker directory
 ```dockerfile
 SECRET_KEY_DJANGO=
 
-DB_NAME=
-DB_USER=
-DB_PASSWORD=
+POSTGRES_DB=
+POSTGRES_USER=
+POSTGRES_PASSWORD=
 DB_HOST=
 DB_PORT=
 ```
